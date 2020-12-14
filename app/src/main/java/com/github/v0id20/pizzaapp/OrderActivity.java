@@ -24,8 +24,7 @@ public class OrderActivity extends AppCompatActivity {
 
     Button placeOrderBtn;
     TextView emptyTextView;
-    ArrayList<Basket> currentOrderItemList;
-
+    ArrayList<Basket> currentOrderList;
 
 
     @Override
@@ -40,21 +39,20 @@ public class OrderActivity extends AppCompatActivity {
 
         PizzaAppApplication application = (PizzaAppApplication) getApplication();
 
-        currentOrderItemList = application.getOrderList();
+        currentOrderList = application.getOrderList();
         emptyTextView = findViewById(R.id.empty);
         placeOrderBtn = findViewById(R.id.place_order);
 
-        if (currentOrderItemList.size() == 0) {
+        if (currentOrderList.size() == 0) {
             emptyTextView.setVisibility(View.VISIBLE);
             placeOrderBtn.setEnabled(false);
-
 
         } else {
             emptyTextView.setVisibility(View.GONE);
             placeOrderBtn.setEnabled(true);
 
             RecyclerView recyclerView = findViewById(R.id.order_recycler);
-            OrderAdapter orderAdapter = new OrderAdapter(currentOrderItemList);
+            OrderAdapter orderAdapter = new OrderAdapter(currentOrderList);
             recyclerView.setAdapter(orderAdapter);
             LinearLayoutManager llm = new LinearLayoutManager(this);
             recyclerView.setLayoutManager(llm);
@@ -76,7 +74,7 @@ public class OrderActivity extends AppCompatActivity {
 
     private void submitOrder(){
         SubmitOrderTask task = new SubmitOrderTask();
-        task.execute(currentOrderItemList);
+        task.execute(currentOrderList);
 
     }
 
@@ -127,7 +125,8 @@ public class OrderActivity extends AppCompatActivity {
         protected void onPostExecute(Void aVoid) {
             emptyTextView.setVisibility(View.VISIBLE);
             placeOrderBtn.setEnabled(false);
-            currentOrderItemList.clear();
+            currentOrderList.clear();
+            currentOrderId++;
             Toast.makeText(OrderActivity.this,"Thank you for your order", Toast.LENGTH_SHORT).show();
         }
     }

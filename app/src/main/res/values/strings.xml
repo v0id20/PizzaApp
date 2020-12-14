@@ -3,4 +3,5 @@
     <string name="pizza">Pizza</string>
     <string name="pasta">Pasta</string>
     <string name="stores">Our Stores</string>
+    <string name="add_to_order">Add to order</string>
 </resources>

@@ -1,5 +1,6 @@
 package com.github.v0id20.pizzaapp;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,12 +13,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 
 public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHolder> {
-    ArrayList<Basket> orders;
+    final ArrayList<Basket> orders;
 
     public OrderAdapter(ArrayList<Basket> orders){
         this.orders = orders;
     }
-
 
     @NonNull
     @Override
@@ -27,7 +27,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
     }
 
     @Override
-    public void onBindViewHolder(@NonNull OrderViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final OrderViewHolder holder, final int position) {
         View v = holder.itemView;
 
         TextView productNameTV = v.findViewById(R.id.nameOrderTextView);
@@ -38,8 +38,20 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
         quantityTV.setText(Integer.toString(orders.get(position).getQuantity()));
         priceTV.setText(Double.toString(orders.get(position).getPrice()*orders.get(position).getQuantity()));
 
-        //ImageView removeImageView = v.findViewById(R.id.deleteOrderImageView);
+        ImageView deleteImageView = v.findViewById(R.id.deleteOrderImageView);
+        deleteImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int upToDatePosition = holder.getAdapterPosition();
+                if (orders.size()>=1) {
+                    orders.remove(upToDatePosition);
+                }
 
+                Log.i("order items", orders.toString());
+                notifyItemRemoved(upToDatePosition);
+
+            }
+        });
 
     }
 
@@ -49,7 +61,6 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
     }
 
     public class OrderViewHolder extends RecyclerView.ViewHolder {
-
         View itemView;
 
         public OrderViewHolder(@NonNull View itemView) {

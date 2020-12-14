@@ -46,7 +46,7 @@ public class PizzaAppApplication extends Application {
                 String size = cursor.getString(indexSize);
 
 
-                pizzaList.add(new Pizza(name, description, price, size, imageResourceId));
+                pizzaList.add(new Pizza(name, description, price, imageResourceId));
                 cursor.moveToNext();
 
             }
