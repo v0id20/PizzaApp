@@ -14,9 +14,13 @@ import java.util.ArrayList;
 
 public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHolder> {
     final ArrayList<Basket> orders;
+    double totalToPay;
+    TextView totalToPayTextView;
 
-    public OrderAdapter(ArrayList<Basket> orders){
+    public OrderAdapter(ArrayList<Basket> orders, double totalToPay,TextView totalToPayTextView){
         this.orders = orders;
+        this.totalToPay = totalToPay;
+        this.totalToPayTextView = totalToPayTextView;
     }
 
     @NonNull
@@ -43,10 +47,17 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
             @Override
             public void onClick(View v) {
                 int upToDatePosition = holder.getAdapterPosition();
-                if (orders.size()>=1) {
-                    orders.remove(upToDatePosition);
-                }
+                if (orders.size()>1) {
+                    double price = orders.get(upToDatePosition).getPrice();
+                    int quantity = orders.get(upToDatePosition).getQuantity();
+                    totalToPay-=price*quantity;
+                    totalToPayTextView.setText(String.format(Double.toString(totalToPay), "d%2"));
+                } else {
 
+
+                    totalToPayTextView.setVisibility(View.INVISIBLE);
+                }
+                orders.remove(upToDatePosition);
                 Log.i("order items", orders.toString());
                 notifyItemRemoved(upToDatePosition);
 

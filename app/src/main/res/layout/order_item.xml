@@ -10,8 +10,9 @@
         android:id="@+id/quantityOrderTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="16dp"
-        android:textSize="18sp"
+        android:layout_marginLeft="24dp"
+        android:textSize="20sp"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -21,20 +22,21 @@
         android:id="@+id/nameOrderTextView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="16dp"
-        android:textSize="18sp"
+        android:layout_marginLeft="20dp"
+        android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toRightOf="@id/quantityOrderTextView"
         app:layout_constraintRight_toLeftOf="@id/priceOrderTextView"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="pizza" />
+        tools:text="Pizza" />
 
     <TextView
         android:id="@+id/priceOrderTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginRight="16dp"
-        android:textSize="18sp"
+        android:layout_marginRight="20dp"
+        android:textSize="20sp"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintRight_toLeftOf="@id/deleteOrderImageView"
         app:layout_constraintTop_toTopOf="parent"
@@ -42,9 +44,10 @@
 
     <ImageView
         android:id="@+id/deleteOrderImageView"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
         android:layout_marginRight="16dp"
+        android:layout_marginBottom="12dp"
         android:src="@drawable/ic_baseline_clear_24"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintRight_toRightOf="parent"
@@ -54,8 +57,10 @@
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="1dp"
+        android:layout_marginLeft="4dp"
+        android:layout_marginRight="4dp"
         android:background="@color/colorAccent"
-        android:src="@color/colorPrimaryDark"
+        android:src="@android:color/darker_gray"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent" />
 

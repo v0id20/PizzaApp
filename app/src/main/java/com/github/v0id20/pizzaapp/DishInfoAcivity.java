@@ -13,6 +13,8 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.util.ArrayList;
+
 public class DishInfoAcivity extends AppCompatActivity {
 
     TextView quantityTV;
@@ -89,8 +91,25 @@ public class DishInfoAcivity extends AppCompatActivity {
         addToOrder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Basket basketItem = new Basket(productName, quantityToOrder, productPrice);
-                application.getOrderList().add(basketItem);
+                Basket basketItem = new Basket();
+                if (application!=null){
+                    ArrayList<Basket> basket = application.getOrderList();
+                    if (basket.size()>0){
+                        for (int i = 0; i<basket.size(); i++) {
+                            if (basket.get(i).getName().equals(productName)){
+                                quantityToOrder = basket.get(i).getQuantity()+quantityToOrder;
+                                basket.set(i, new Basket(productName, quantityToOrder, productPrice));
+                                Toast.makeText(DishInfoAcivity.this, "Added to your basket", Toast.LENGTH_SHORT).show();
+                                finish();
+                                return;
+                            }
+
+                        }
+                    }
+                    basketItem = new Basket(productName, quantityToOrder, productPrice);
+                    basket.add(basketItem);
+                }
+
                 Log.i("basket item", productName + " " + quantityToOrder);
                 Toast.makeText(DishInfoAcivity.this, "Added to your basket", Toast.LENGTH_SHORT).show();
                 finish();

@@ -14,6 +14,10 @@ public class Basket {
 
     }
 
+    public Basket(){
+
+    }
+
 
     public String getName() {
         return name;
