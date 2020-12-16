@@ -3,29 +3,41 @@ package com.github.v0id20.pizzaapp;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 public class DishInfoAcivity extends AppCompatActivity {
 
     TextView quantityTV;
+    RadioGroup radioGroup;
     RadioButton smallSize;
     RadioButton mediumSize;
     RadioButton largeSize;
     Button addToOrder;
 
     int quantityToOrder = 1;
+    int basketItemCount;
     String productName;
     double productPrice;
+    double productPriceSmall;
+    double productPriceMedium;
+    double productPriceLarge;
 
     PizzaAppApplication application;
 
@@ -34,41 +46,80 @@ public class DishInfoAcivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dish_info);
 
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         Intent receivedIntent = getIntent();
         int id = receivedIntent.getIntExtra(MainActivity.EXTRA_POSITION, 0);
         String dish_type = receivedIntent.getStringExtra(MainActivity.EXTRA_DISH_TYPE);
 
+        addToOrder = findViewById(R.id.add_to_order_btn);
+        quantityTV = findViewById(R.id.quantity);
+
+        final TextView priceTV = findViewById(R.id.price);
+
         application = (PizzaAppApplication) getApplication();
-        if (application != null) {
-            Dish currentDish = new Dish();
-            if (dish_type.equals(PizzaFragment.EXTRA_DISH_PIZZA)) {
-                //initialize radiobuttons and make them visible
-                currentDish = (Dish) application.getPizzaList().get(id);
-            } else if (dish_type.equals(PastaFragment.EXTRA_DISH_VALUE_PASTA)) {
-                currentDish = (Dish) application.getPastaList().get(id);
-            }
 
-            if (currentDish!=null) {
-                TextView nameTV = findViewById(R.id.name);
-                productName = currentDish.getName();
-                nameTV.setText(productName);
+        Dish currentDish = new Dish();
+        basketItemCount = application.getBasketItemCount();
+        if (dish_type.equals(PizzaFragment.EXTRA_DISH_PIZZA)) {
 
-                TextView descriptionTV = findViewById(R.id.description);
-                descriptionTV.setText(currentDish.getDescription());
+            //initialize radiobuttons and make them visible
+            currentDish = (Dish) application.getPizzaList().get(id);
+            Pizza currentPizza =(Pizza)currentDish;
 
-                TextView priceTV = findViewById(R.id.price);
-                productPrice = currentDish.getPrice();
-                priceTV.setText(Double.toString(productPrice));
+            productPriceSmall = currentPizza.getPriceSmall();
+            productPriceMedium = currentPizza.getPriceMedium();
+            productPriceLarge = currentPizza.getPriceLarge();
 
-                ImageView pizzaIV = findViewById(R.id.pizza_info_image);
-                pizzaIV.setImageResource(currentDish.getImageResourceId());
-            }
+            radioGroup = findViewById(R.id.size_radio_group);
+            radioGroup.setVisibility(View.VISIBLE);
+            radioGroup.clearCheck();
+            radioGroup.check(R.id.size_small);
+            radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(RadioGroup group, int checkedId) {
+                    switch (checkedId) {
+                        case R.id.size_small:
+                            priceTV.setText("$"+productPriceSmall);
+                            productPrice = productPriceSmall;
 
-
+                            break;
+                        case R.id.size_medium:
+                            priceTV.setText("$"+productPriceMedium);
+                            productPrice = productPriceMedium;
+                            break;
+                        case R.id.size_large:
+                            priceTV.setText("$"+productPriceLarge);
+                            productPrice = productPriceLarge;
+                            break;
+                        default:
+                            break;
+                    }
+                    String buttonText = String.format(Locale.getDefault(), "Add %d to order - $%.2f", quantityToOrder, productPrice * quantityToOrder);
+                    addToOrder.setText(buttonText);
+                }
+            });
+        } else if (dish_type.equals(PastaFragment.EXTRA_DISH_VALUE_PASTA)) {
+            currentDish = (Dish) application.getPastaList().get(id);
         }
 
+        TextView nameTV = findViewById(R.id.name);
+        productName = currentDish.getName();
+        nameTV.setText(productName);
 
-        quantityTV = findViewById(R.id.quantity);
+        TextView descriptionTV = findViewById(R.id.description);
+        descriptionTV.setText(currentDish.getDescription());
+
+
+        productPrice = currentDish.getPrice();
+        priceTV.setText("$" + productPrice);
+        addToOrder.setText(String.format(Locale.getDefault(), "Add 1 to order - $%.2f", productPrice));
+
+        ImageView pizzaIV = findViewById(R.id.pizza_info_image);
+        pizzaIV.setImageResource(currentDish.getImageResourceId());
+
 
         ImageView removeIV = findViewById(R.id.remove);
         removeIV.setOnClickListener(new View.OnClickListener() {
@@ -87,18 +138,18 @@ public class DishInfoAcivity extends AppCompatActivity {
         });
 
 
-        addToOrder = findViewById(R.id.add_to_order_btn);
         addToOrder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Basket basketItem = new Basket();
-                if (application!=null){
-                    ArrayList<Basket> basket = application.getOrderList();
-                    if (basket.size()>0){
-                        for (int i = 0; i<basket.size(); i++) {
-                            if (basket.get(i).getName().equals(productName)){
-                                quantityToOrder = basket.get(i).getQuantity()+quantityToOrder;
-                                basket.set(i, new Basket(productName, quantityToOrder, productPrice));
+                BasketItem basketItem = new BasketItem();
+                if (application != null) {
+                    ArrayList<BasketItem> basket = application.getOrderList();
+                    if (basket.size() > 0) {
+                        for (int i = 0; i < basket.size(); i++) {
+                            if (basket.get(i).getName().equals(productName)) {
+                                quantityToOrder = basket.get(i).getQuantity() + quantityToOrder;
+                                application.setBasketItemCount(basketItemCount + quantityToOrder);
+                                basket.set(i, new BasketItem(productName, quantityToOrder, productPrice));
                                 Toast.makeText(DishInfoAcivity.this, "Added to your basket", Toast.LENGTH_SHORT).show();
                                 finish();
                                 return;
@@ -106,7 +157,8 @@ public class DishInfoAcivity extends AppCompatActivity {
 
                         }
                     }
-                    basketItem = new Basket(productName, quantityToOrder, productPrice);
+                    basketItem = new BasketItem(productName, quantityToOrder, productPrice);
+                    application.setBasketItemCount(basketItemCount + quantityToOrder);
                     basket.add(basketItem);
                 }
 
@@ -127,6 +179,12 @@ public class DishInfoAcivity extends AppCompatActivity {
             quantityToOrder -= 1;
         }
         quantityTV.setText(Integer.toString(quantity));
+        String buttonText = String.format(Locale.getDefault(), "Add %d to order - $%.2f", quantityToOrder, productPrice * quantityToOrder);
+
+        addToOrder.setText(buttonText);
+
 
     }
+
+
 }

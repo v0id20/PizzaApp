@@ -48,7 +48,6 @@ public class PastaFragment extends Fragment {
        GridLayoutManager glm = new GridLayoutManager(getContext(), 2);
        pastaRecycler.setLayoutManager(glm);
 
-
        return v;
     }
 }

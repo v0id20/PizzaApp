@@ -1,8 +1,6 @@
 package com.github.v0id20.pizzaapp;
 
 public class Dish {
-
-
     private String name;
     private String description;
     private double price;
@@ -11,7 +9,6 @@ public class Dish {
     public Dish(){
         super();
     }
-
 
     public Dish(String name, String desc, double price, int resourceId) {
         this.name = name;
@@ -31,7 +28,6 @@ public class Dish {
     public double getPrice() {
         return price;
     }
-
 
     public int getImageResourceId() {
         return imageResourceId;

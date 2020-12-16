@@ -6,12 +6,13 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -25,10 +26,13 @@ public class OrderActivity extends AppCompatActivity {
 
     Button placeOrderBtn;
     TextView emptyTextView;
-    ArrayList<Basket> currentOrderList;
+    ArrayList<BasketItem> currentOrderList;
     TextView totalToPayTextView;
     TextView totalTextView;
+    int basketItemCount;
     double totalToPay;
+
+    OnRemoveOrderItemListener onRemoveOrderItemListener;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -38,6 +42,8 @@ public class OrderActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("My Basket");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         //setTitle("My Basket");
 
         PizzaAppApplication application = (PizzaAppApplication) getApplication();
@@ -49,11 +55,29 @@ public class OrderActivity extends AppCompatActivity {
         placeOrderBtn = findViewById(R.id.place_order);
 
 
-        for (Basket item :currentOrderList){
+
+        for (BasketItem item :currentOrderList){
             totalToPay +=item.getPrice()*item.getQuantity();
         }
 
 
+        onRemoveOrderItemListener = new OnRemoveOrderItemListener() {
+            @Override
+            public void onRemoveOrderItem(int position) {
+                if (currentOrderList.size()>1) {
+                    double price = currentOrderList.get(position).getPrice();
+                    int quantity = currentOrderList.get(position).getQuantity();
+                    totalToPay-=price*quantity;
+                    totalToPayTextView.setText(String.format(Double.toString(totalToPay), "%.2f"));
+                } else {
+                    setBasketEmpty();
+
+                }
+                currentOrderList.remove(position);
+                Log.i("order items", currentOrderList.toString());
+
+            }
+        };
 
 
         if (currentOrderList.size() == 0) {
@@ -63,10 +87,10 @@ public class OrderActivity extends AppCompatActivity {
             emptyTextView.setVisibility(View.GONE);
             placeOrderBtn.setEnabled(true);
             totalToPayTextView.setVisibility(View.VISIBLE);
-            totalToPayTextView.setText(Double.toString(totalToPay));
+            totalToPayTextView.setText(String.format("%.2f", totalToPay));
 
             RecyclerView recyclerView = findViewById(R.id.order_recycler);
-            OrderAdapter orderAdapter = new OrderAdapter(currentOrderList, totalToPay, totalToPayTextView);
+            OrderAdapter orderAdapter = new OrderAdapter(currentOrderList, onRemoveOrderItemListener);
             recyclerView.setAdapter(orderAdapter);
             LinearLayoutManager llm = new LinearLayoutManager(this);
             recyclerView.setLayoutManager(llm);
@@ -91,14 +115,14 @@ public class OrderActivity extends AppCompatActivity {
 
     }
 
-    public class SubmitOrderTask extends AsyncTask<ArrayList<Basket>, Void, Void> {
+    public class SubmitOrderTask extends AsyncTask<ArrayList<BasketItem>, Void, Void> {
 
         DatabaseHelper helper;
 
         @Override
-        protected Void doInBackground(ArrayList<Basket>... orderLists) {
+        protected Void doInBackground(ArrayList<BasketItem>... orderLists) {
 
-            ArrayList<Basket> orders = orderLists[0];
+            ArrayList<BasketItem> orders = orderLists[0];
             try {
                 helper = new DatabaseHelper(OrderActivity.this);
                 SQLiteDatabase db = helper.getReadableDatabase();
@@ -121,6 +145,7 @@ public class OrderActivity extends AppCompatActivity {
                     orderValues.put("ORDER_ID", currentOrderId);
                     orderValues.put("NAME", orders.get(i).getName());
                     int quantity = orders.get(i).getQuantity();
+
                     orderValues.put("QUANTITY", quantity);
                     orderValues.put("PRICE", orders.get(i).getPrice() * quantity);
                     db.insert("BASKET", null, orderValues);

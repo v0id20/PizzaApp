@@ -3,6 +3,10 @@
     <string name="pizza">Pizza</string>
     <string name="pasta">Pasta</string>
     <string name="stores">Our Stores</string>
-    <string name="add_to_order">Add to order</string>
+    <string name="add_to_order">Add 1 to order</string>
     <string name="total">Total:</string>
+    <string name="my_basket">My Basket</string>
+    <string name="small_size">Small</string>
+    <string name="medium_size">Medium</string>
+    <string name="large_size">Large</string>
 </resources>

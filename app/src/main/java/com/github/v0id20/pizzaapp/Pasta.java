@@ -7,4 +7,8 @@ public class Pasta extends Dish  {
         super(name, desc, price, resourceId);
     }
 
+    public Pasta(){
+
+    }
+
 }
