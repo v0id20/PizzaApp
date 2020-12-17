@@ -20,7 +20,7 @@ public class MainActivity extends AppCompatActivity {
     public static final String EXTRA_DISH_TYPE = "dish type";
 
     String[] tabNames;
-    int basketItemCount = 2;
+    int basketItemCount;
     TextView textBasketItemCount;
 
     @Override
@@ -40,6 +40,16 @@ public class MainActivity extends AppCompatActivity {
         TabLayout tabs = (TabLayout) findViewById(R.id.tab_layout);
         tabs.setupWithViewPager(vp);
 
+        basketItemCount = ((PizzaAppApplication)getApplication()).getBasket().totalItemCount;
+
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        basketItemCount = ((PizzaAppApplication)getApplication()).getBasket().totalItemCount;
+        setupBasketBadge(basketItemCount);
     }
 
     @Override

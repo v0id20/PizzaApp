@@ -28,7 +28,7 @@ public class PizzaFragment extends Fragment {
         listener = new OnItemClickListener() {
             @Override
             public void onItemClick(int position) {
-                Intent i = new Intent(getActivity(), DishInfoAcivity.class);
+                Intent i = new Intent(getActivity(), DishInfoActivity.class);
                 i.putExtra(MainActivity.EXTRA_POSITION, position);
                 i.putExtra(MainActivity.EXTRA_DISH_TYPE,EXTRA_DISH_PIZZA);
                 startActivity(i);

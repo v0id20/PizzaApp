@@ -3,9 +3,6 @@ package com.github.v0id20.pizzaapp;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -14,7 +11,6 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -22,7 +18,7 @@ import androidx.appcompat.widget.Toolbar;
 import java.util.ArrayList;
 import java.util.Locale;
 
-public class DishInfoAcivity extends AppCompatActivity {
+public class DishInfoActivity extends AppCompatActivity {
 
     TextView quantityTV;
     RadioGroup radioGroup;
@@ -60,8 +56,11 @@ public class DishInfoAcivity extends AppCompatActivity {
         final TextView priceTV = findViewById(R.id.price);
 
         application = (PizzaAppApplication) getApplication();
+        final Basket baset = application.getBasket();
+
 
         Dish currentDish = new Dish();
+        //
         basketItemCount = application.getBasketItemCount();
         if (dish_type.equals(PizzaFragment.EXTRA_DISH_PIZZA)) {
 
@@ -82,16 +81,16 @@ public class DishInfoAcivity extends AppCompatActivity {
                 public void onCheckedChanged(RadioGroup group, int checkedId) {
                     switch (checkedId) {
                         case R.id.size_small:
-                            priceTV.setText("$"+productPriceSmall);
+                            priceTV.setText(formatPrice(productPriceSmall));
                             productPrice = productPriceSmall;
 
                             break;
                         case R.id.size_medium:
-                            priceTV.setText("$"+productPriceMedium);
+                            priceTV.setText(formatPrice(productPriceMedium));
                             productPrice = productPriceMedium;
                             break;
                         case R.id.size_large:
-                            priceTV.setText("$"+productPriceLarge);
+                            priceTV.setText(formatPrice(productPriceLarge));
                             productPrice = productPriceLarge;
                             break;
                         default:
@@ -112,9 +111,8 @@ public class DishInfoAcivity extends AppCompatActivity {
         TextView descriptionTV = findViewById(R.id.description);
         descriptionTV.setText(currentDish.getDescription());
 
-
         productPrice = currentDish.getPrice();
-        priceTV.setText("$" + productPrice);
+        priceTV.setText(formatPrice(productPrice));
         addToOrder.setText(String.format(Locale.getDefault(), "Add 1 to order - $%.2f", productPrice));
 
         ImageView pizzaIV = findViewById(R.id.pizza_info_image);
@@ -143,33 +141,47 @@ public class DishInfoAcivity extends AppCompatActivity {
             public void onClick(View v) {
                 BasketItem basketItem = new BasketItem();
                 if (application != null) {
-                    ArrayList<BasketItem> basket = application.getOrderList();
+                    //ArrayList<BasketItem> basket = application.getOrderList();
+                    ArrayList<BasketItem> basket = application.getBasket().basket;
                     if (basket.size() > 0) {
                         for (int i = 0; i < basket.size(); i++) {
                             if (basket.get(i).getName().equals(productName)) {
-                                quantityToOrder = basket.get(i).getQuantity() + quantityToOrder;
-                                application.setBasketItemCount(basketItemCount + quantityToOrder);
-                                basket.set(i, new BasketItem(productName, quantityToOrder, productPrice));
-                                Toast.makeText(DishInfoAcivity.this, "Added to your basket", Toast.LENGTH_SHORT).show();
-                                finish();
-                                return;
-                            }
+                                if (basket.get(i).getPrice()==productPrice) {
+                                    baset.totalItemCount += quantityToOrder;
+                                    quantityToOrder = basket.get(i).getQuantity() + quantityToOrder;
 
+                                    application.setBasketItemCount(basketItemCount + quantityToOrder);
+                                    basket.set(i, new BasketItem(productName, quantityToOrder, productPrice));
+                                    Toast.makeText(DishInfoActivity.this, "Added to your basket", Toast.LENGTH_SHORT).show();
+                                    finish();
+                                    return;
+                                } else {
+                                    continue;
+                                }
+//                                baset.totalItemCount += quantityToOrder;
+//                                quantityToOrder = basket.get(i).getQuantity() + quantityToOrder;
+//
+//                                application.setBasketItemCount(basketItemCount + quantityToOrder);
+//                                basket.set(i, new BasketItem(productName, quantityToOrder, productPrice));
+//                                Toast.makeText(DishInfoActivity.this, "Added to your basket", Toast.LENGTH_SHORT).show();
+//                                finish();
+//                                return;
+                            }
                         }
                     }
                     basketItem = new BasketItem(productName, quantityToOrder, productPrice);
+                    baset.totalItemCount += quantityToOrder;
                     application.setBasketItemCount(basketItemCount + quantityToOrder);
                     basket.add(basketItem);
                 }
-
                 Log.i("basket item", productName + " " + quantityToOrder);
-                Toast.makeText(DishInfoAcivity.this, "Added to your basket", Toast.LENGTH_SHORT).show();
+                Toast.makeText(DishInfoActivity.this, "Added to your basket", Toast.LENGTH_SHORT).show();
                 finish();
             }
         });
     }
 
-    public void changeQuantity(boolean add) {
+    private void changeQuantity(boolean add) {
         int quantity = Integer.valueOf(quantityTV.getText().toString());
         if (add) {
             quantity += 1;
@@ -180,11 +192,12 @@ public class DishInfoAcivity extends AppCompatActivity {
         }
         quantityTV.setText(Integer.toString(quantity));
         String buttonText = String.format(Locale.getDefault(), "Add %d to order - $%.2f", quantityToOrder, productPrice * quantityToOrder);
-
         addToOrder.setText(buttonText);
-
-
     }
 
+    public static String formatPrice(double price){
+        return String.format(("$%.2f"), price);
+
+    }
 
 }

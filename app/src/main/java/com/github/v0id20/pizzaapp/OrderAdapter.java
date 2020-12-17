@@ -31,13 +31,15 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
     public void onBindViewHolder(@NonNull final OrderViewHolder holder, final int position) {
         View v = holder.itemView;
 
+
+
         TextView productNameTV = v.findViewById(R.id.nameOrderTextView);
         TextView quantityTV = v.findViewById(R.id.quantityOrderTextView);
         TextView priceTV = v.findViewById(R.id.priceOrderTextView);
 
         productNameTV.setText(orders.get(position).getName());
         quantityTV.setText(Integer.toString(orders.get(position).getQuantity()));
-        priceTV.setText(Double.toString(orders.get(position).getPrice()*orders.get(position).getQuantity()));
+        priceTV.setText(DishInfoActivity.formatPrice(orders.get(position).getPrice()*orders.get(position).getQuantity()));
 
         ImageView deleteImageView = v.findViewById(R.id.deleteOrderImageView);
         deleteImageView.setOnClickListener(new View.OnClickListener() {
@@ -46,7 +48,6 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
                 int upToDatePosition = holder.getAdapterPosition();
                 onRemoveOrderItemListener.onRemoveOrderItem(upToDatePosition);
                 notifyItemRemoved(upToDatePosition);
-
             }
         });
 

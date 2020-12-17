@@ -29,9 +29,12 @@ public class PizzaAppApplication extends Application {
     public void onCreate() {
         super.onCreate();
 
+        basket = new Basket();
+
         pizzaList = new ArrayList<>();
         orderList = new ArrayList<>();
         pastaList = new ArrayList<>();
+        basket.basket = new ArrayList<>();
 
         helper = new DatabaseHelper(this);
         try {

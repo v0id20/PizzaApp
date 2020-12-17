@@ -15,7 +15,6 @@ public class BasketItem {
     public BasketItem(){
     }
 
-
     public String getName() {
         return name;
     }

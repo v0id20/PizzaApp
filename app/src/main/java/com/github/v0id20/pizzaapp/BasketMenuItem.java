@@ -11,6 +11,7 @@ import android.widget.TextView;
 public class BasketMenuItem {
 
     TextView basketItemCountTextView;
+    Basket basket;
     int basketItemCount;
     Activity activity;
 
