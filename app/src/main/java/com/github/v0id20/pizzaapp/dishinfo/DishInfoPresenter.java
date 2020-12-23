@@ -15,16 +15,16 @@ import java.util.ArrayList;
 import java.util.Locale;
 
 public class DishInfoPresenter implements DishInfoPresenterInterface.Presenter {
-    int id;
-    String dishType;
-    Basket applicationBasket;
-    PizzaAppApplication application;
-    DishInfoPresenterInterface.View view;
-    Dish currentDish;
+    private int id;
+    private String dishType;
+    private Basket applicationBasket;
+    private PizzaAppApplication application;
+    private DishInfoPresenterInterface.View view;
+    private Dish currentDish;
 
-    int quantityToOrder = 1;
-    double productPrice;
-    String productName;
+    private int quantityToOrder = 1;
+    private double productPrice;
+    private String productName;
 
     public Dish initCurrentDish() {
         Dish d;
@@ -45,7 +45,6 @@ public class DishInfoPresenter implements DishInfoPresenterInterface.Presenter {
         this.view = view;
         this.application = application;
         currentDish = initCurrentDish();
-
     }
 
     @Override
@@ -103,15 +102,13 @@ public class DishInfoPresenter implements DishInfoPresenterInterface.Presenter {
     public void addToOrder() {
         BasketItem basketItem;
         ArrayList<BasketItem> basket = applicationBasket.basketList;
-        ArrayList<BasketItem> basketWithTotal = (ArrayList<BasketItem>) basket.clone();
+       // ArrayList<BasketItem> basketWithTotal = (ArrayList<BasketItem>) basket.clone();
         if (basket.size() > 0) {
             for (int i = 0; i < basket.size(); i++) {
                 if (basket.get(i).getName().equals(productName)) {
                     if (basket.get(i).getPrice() == productPrice) {
                         applicationBasket.addExistingBasketItem(i, quantityToOrder);
                         view.close();
-//                        Toast.makeText(DishInfoActivity.this, "Added to your basket", Toast.LENGTH_SHORT).show();
-//                        finish();
                         return;
                     } else {
                         continue;

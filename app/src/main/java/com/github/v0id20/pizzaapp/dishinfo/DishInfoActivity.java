@@ -26,21 +26,21 @@ import com.github.v0id20.pizzaapp.PizzaAppApplication;
 import com.github.v0id20.pizzaapp.PizzaFragment;
 import com.github.v0id20.pizzaapp.R;
 
-import java.util.ArrayList;
+
 import java.util.Locale;
 
 public class DishInfoActivity extends AppCompatActivity implements DishInfoPresenterInterface.View {
     public static final String EXTRA_DISH_VALUE_PIZZA = "pizza";
 
-    TextView quantityTV;
-    RadioGroup radioGroup;
-    TextView nameTV;
-    TextView descriptionTV;
-    TextView priceTV;
-    ImageView dishIV;
-    Button addToOrder;
+    private RadioGroup radioGroup;
+    private TextView nameTV;
+    private TextView descriptionTV;
+    private TextView quantityTV;
+    private TextView priceTV;
+    private ImageView dishIV;
+    private Button addToOrder;
+    private Basket applicationBasket;
 
-    Basket applicationBasket;
     PizzaAppApplication application;
     DishInfoPresenter presenter;
 
@@ -78,50 +78,6 @@ public class DishInfoActivity extends AppCompatActivity implements DishInfoPrese
             }
         });
 
-
-//        Dish currentDish = new Dish();
-//        if (dish_type.equals(EXTRA_DISH_VALUE_PIZZA)) {
-//
-//            //initialize radiobuttons and make them visible
-//            currentDish = (Dish) application.getPizzaList().get(id);
-//            Pizza currentPizza = (Pizza) currentDish;
-//
-//            productPriceSmall = currentPizza.getPriceSmall();
-//            productPriceMedium = currentPizza.getPriceMedium();
-//            productPriceLarge = currentPizza.getPriceLarge();
-//
-//            radioGroup = findViewById(R.id.size_radio_group);
-//            radioGroup.setVisibility(View.VISIBLE);
-//            radioGroup.clearCheck();
-//            radioGroup.check(R.id.size_small);
-//            radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-//                @Override
-//                public void onCheckedChanged(RadioGroup group, int checkedId) {
-//                    presenter.onSizeSelected(checkedId);
-////                    switch (checkedId) {
-////                        case R.id.size_small:
-////                            priceTV.setText(formatPrice(productPriceSmall));
-////                            productPrice = productPriceSmall;
-////                            break;
-////                        case R.id.size_medium:
-////                            priceTV.setText(formatPrice(productPriceMedium));
-////                            productPrice = productPriceMedium;
-////                            break;
-////                        case R.id.size_large:
-////                            priceTV.setText(formatPrice(productPriceLarge));
-////                            productPrice = productPriceLarge;
-////                            break;
-////                        default:
-////                            break;
-////                    }
-////                    String buttonText = String.format(Locale.getDefault(), "Add %d to order - $%.2f", quantityToOrder, productPrice * quantityToOrder);
-////                    addToOrder.setText(buttonText);
-//                }
-//            });
-//        } else if (dish_type.equals(PastaFragment.EXTRA_DISH_VALUE_PASTA)) {
-//            currentDish = (Dish) application.getPastaList().get(id);
-//        }
-
         ImageView removeIV = findViewById(R.id.remove);
         removeIV.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -146,20 +102,6 @@ public class DishInfoActivity extends AppCompatActivity implements DishInfoPrese
             }
         });
     }
-
-//    private void changeQuantity(boolean add) {
-//        int quantity = Integer.valueOf(quantityTV.getText().toString());
-//        if (add) {
-//            quantity += 1;
-//            quantityToOrder += 1;
-//        } else {
-//            quantity -= 1;
-//            quantityToOrder -= 1;
-//        }
-//        quantityTV.setText(Integer.toString(quantity));
-//        String buttonText = String.format(Locale.getDefault(), "Add %d to order - $%.2f", quantityToOrder, productPrice * quantityToOrder);
-//        addToOrder.setText(buttonText);
-//    }
 
     public static String formatPrice(double price) {
         return String.format(("$%.2f"), price);
