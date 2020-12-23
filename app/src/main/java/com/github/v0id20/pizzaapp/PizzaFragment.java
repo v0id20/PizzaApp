@@ -12,13 +12,13 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.github.v0id20.pizzaapp.dishinfo.DishInfoActivity;
+
 public class PizzaFragment extends Fragment {
 
     OnItemClickListener listener;
     PizzaAppApplication application;
 
-
-    public static final String EXTRA_DISH_PIZZA = "pizza";
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,7 +30,7 @@ public class PizzaFragment extends Fragment {
             public void onItemClick(int position) {
                 Intent i = new Intent(getActivity(), DishInfoActivity.class);
                 i.putExtra(MainActivity.EXTRA_POSITION, position);
-                i.putExtra(MainActivity.EXTRA_DISH_TYPE,EXTRA_DISH_PIZZA);
+                i.putExtra(MainActivity.EXTRA_DISH_TYPE,DishInfoActivity.EXTRA_DISH_VALUE_PIZZA);
                 startActivity(i);
             }
         };

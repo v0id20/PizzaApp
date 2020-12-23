@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -25,11 +26,12 @@ public class OrderActivity extends AppCompatActivity {
     private TextView emptyTextView;
     private TextView amountToPayTextView;
     private TextView totalTextView;
-
+    RecyclerView recyclerView;
     double amountToPay;
     Basket currentBasket;
     Integer currentOrderId = 0;
     ArrayList<BasketItem> currentOrderList;
+    OrderAdapter orderAdapter;
 
     OnRemoveOrderItemListener onRemoveOrderItemListener;
 
@@ -45,25 +47,26 @@ public class OrderActivity extends AppCompatActivity {
 
         PizzaAppApplication application = (PizzaAppApplication) getApplication();
         currentBasket = application.getBasket();
-        currentOrderList = currentBasket.basket;
-        amountToPay = currentBasket.countTotalToPay();
+        currentOrderList = currentBasket.basketList;
+        amountToPay = currentBasket.totalToPay;
+        //amountToPay = currentBasket.countTotalToPay();
 
         emptyTextView = findViewById(R.id.empty);
-        amountToPayTextView = findViewById(R.id.total_amount);
-        totalTextView = findViewById(R.id.total);
+        //amountToPayTextView = findViewById(R.id.total_amount);
+        //totalTextView = findViewById(R.id.total);
         placeOrderBtn = findViewById(R.id.place_order);
 
         onRemoveOrderItemListener = new OnRemoveOrderItemListener() {
             @Override
             public void onRemoveOrderItem(int position) {
-                BasketItem itemToRemove = currentOrderList.get(position);
+                BasketItem itemToRemove = currentBasket.basketWithTotal.get(position);
                 amountToPay = currentBasket.removeBasketItem(itemToRemove);
-                if (currentOrderList.size() > 1) {
-                    amountToPayTextView.setText(String.format("%.2f", amountToPay));
-                } else {
+                if ( currentBasket.basketWithTotal.size() <1) {
                     setBasketEmpty();
-                }
-                currentOrderList.remove(position);
+                } //                currentBasket.basketWithTotal.set(currentBasket.basketWithTotal.size()-1, new BasketItem("Total", ));
+//                currentBasket.basketWithTotal.remove(position);
+//
+//                currentOrderList.remove(position);
             }
         };
 
@@ -75,11 +78,12 @@ public class OrderActivity extends AppCompatActivity {
             //set views and add data otherwise
             emptyTextView.setVisibility(View.GONE);
             placeOrderBtn.setEnabled(true);
-            amountToPayTextView.setVisibility(View.VISIBLE);
-            amountToPayTextView.setText(String.format("%.2f", amountToPay));
+           // amountToPayTextView.setVisibility(View.VISIBLE);
+           // amountToPayTextView.setText(String.format("%.2f", amountToPay));
 
-            RecyclerView recyclerView = findViewById(R.id.order_recycler);
-            OrderAdapter orderAdapter = new OrderAdapter(currentOrderList, onRemoveOrderItemListener);
+            ArrayList<BasketItem> currentOrderListWithTotal = currentBasket.createBasketWithTotal();
+            recyclerView = findViewById(R.id.order_recycler);
+            orderAdapter = new OrderAdapter(currentOrderListWithTotal, onRemoveOrderItemListener);
             recyclerView.setAdapter(orderAdapter);
             LinearLayoutManager llm = new LinearLayoutManager(this);
             recyclerView.setLayoutManager(llm);
@@ -96,6 +100,7 @@ public class OrderActivity extends AppCompatActivity {
 
     private void submitOrder() {
         SubmitOrderTask task = new SubmitOrderTask();
+        Log.i("order", currentOrderList.size()+" "+currentOrderList.get(0).getName()+" "+currentOrderList.get(0).getName());
         task.execute(currentOrderList);
     }
 
@@ -140,7 +145,15 @@ public class OrderActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(Void aVoid) {
             setBasketEmpty();
-            currentOrderList.clear();
+//            ((PizzaAppApplication)getApplication()).setBasket(new Basket());
+            ((PizzaAppApplication)getApplication()).getBasket();
+            currentBasket.clearBasket();
+//           currentBasket.totals = new BasketItem("Total", 0, 0, BasketItem.TYPE_TOTAL);
+//            currentBasket.basketWithTotal.clear();
+//            currentBasket.basketList.clear();
+            Log.i("order list sizec", " "+currentOrderList.size());
+
+            orderAdapter.notifyDataSetChanged();
             currentOrderId++;
             Intent i = new Intent(OrderActivity.this, OrderHistoryActivity.class);
             startActivity(i);
@@ -151,7 +164,7 @@ public class OrderActivity extends AppCompatActivity {
     private void setBasketEmpty() {
         emptyTextView.setVisibility(View.VISIBLE);
         placeOrderBtn.setEnabled(false);
-        amountToPayTextView.setVisibility(View.INVISIBLE);
-        totalTextView.setVisibility(View.INVISIBLE);
+       // amountToPayTextView.setVisibility(View.INVISIBLE);
+       // totalTextView.setVisibility(View.INVISIBLE);
     }
 }

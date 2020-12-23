@@ -3,9 +3,7 @@ package com.github.v0id20.pizzaapp;
 import android.app.Application;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -34,7 +32,8 @@ public class PizzaAppApplication extends Application {
         pizzaList = new ArrayList<>();
         orderList = new ArrayList<>();
         pastaList = new ArrayList<>();
-        basket.basket = new ArrayList<>();
+        basket.basketList = new ArrayList<>();
+        basket.totals = new BasketItem("Total", 0, 0, BasketItem.TYPE_TOTAL);
 
         helper = new DatabaseHelper(this);
         try {
@@ -108,9 +107,6 @@ public class PizzaAppApplication extends Application {
         return pizzaList;
     }
 
-    public ArrayList<BasketItem> getOrderList() {
-        return orderList;
-    }
 
     public ArrayList<Dish> getPastaList() {
         return pastaList;
@@ -128,6 +124,9 @@ public class PizzaAppApplication extends Application {
         return basket;
     }
 
+    public void setBasket(Basket basket) {
+        this.basket = basket;
+    }
 
     private void retrievePizzaRow(ArrayList<Dish> list) {
         String[] query;

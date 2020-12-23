@@ -21,7 +21,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".DishInfoActivity" android:parentActivityName=".MainActivity"></activity>
+        <activity android:name=".dishinfo.DishInfoActivity" android:parentActivityName=".MainActivity"></activity>
         <activity android:name=".OrderActivity" android:parentActivityName=".MainActivity"></activity>
         <activity android:name=".OrderHistoryActivity"></activity>
     </application>

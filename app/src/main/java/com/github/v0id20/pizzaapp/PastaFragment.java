@@ -12,6 +12,8 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.github.v0id20.pizzaapp.dishinfo.DishInfoActivity;
+
 import java.util.ArrayList;
 
 public class PastaFragment extends Fragment {
