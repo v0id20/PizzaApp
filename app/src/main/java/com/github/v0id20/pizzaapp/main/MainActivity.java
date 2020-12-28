@@ -1,4 +1,4 @@
-package com.github.v0id20.pizzaapp;
+package com.github.v0id20.pizzaapp.main;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -13,6 +13,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import com.github.v0id20.pizzaapp.PizzaAppApplication;
+import com.github.v0id20.pizzaapp.R;
 import com.github.v0id20.pizzaapp.order.OrderActivity;
 import com.google.android.material.tabs.TabLayout;
 
@@ -29,20 +31,19 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         tabNames = new String[]{getResources().getString(R.string.pizza), getResources().getString(R.string.pasta), getResources().getString(R.string.stores)};
-        FragmentAdapter adapter = new FragmentAdapter(getSupportFragmentManager(), tabNames);
+        MainPagerAdapter adapter = new MainPagerAdapter(getSupportFragmentManager(), tabNames);
 
         ViewPager vp = findViewById(R.id.view_pager);
         vp.setAdapter(adapter);
 
-        TabLayout tabs = (TabLayout) findViewById(R.id.tab_layout);
+        TabLayout tabs = findViewById(R.id.tab_layout);
         tabs.setupWithViewPager(vp);
 
         basketItemCount = ((PizzaAppApplication)getApplication()).getBasket().totalItemCount;
-
 
     }
 
@@ -61,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
         final MenuItem menuItem = menu.findItem(R.id.basket);
         menuItem.setActionView(R.layout.actionbar_cart);
         View actionView = menuItem.getActionView();
-        textBasketItemCount = (TextView) actionView.findViewById(R.id.cart_badge);
+        textBasketItemCount = actionView.findViewById(R.id.cart_badge);
         setupBasketBadge(basketItemCount);
 
         actionView.setOnClickListener(new View.OnClickListener() {
@@ -73,7 +74,6 @@ public class MainActivity extends AppCompatActivity {
 
         return true;
     }
-
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {

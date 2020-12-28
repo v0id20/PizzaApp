@@ -1,13 +1,10 @@
 package com.github.v0id20.pizzaapp.dishinfo;
 
-import android.widget.RadioGroup;
-import android.widget.Toast;
-
-import com.github.v0id20.pizzaapp.Basket;
-import com.github.v0id20.pizzaapp.BasketItem;
-import com.github.v0id20.pizzaapp.Dish;
-import com.github.v0id20.pizzaapp.Pasta;
-import com.github.v0id20.pizzaapp.Pizza;
+import com.github.v0id20.pizzaapp.model.Basket;
+import com.github.v0id20.pizzaapp.model.BasketItem;
+import com.github.v0id20.pizzaapp.model.Dish;
+import com.github.v0id20.pizzaapp.model.Pasta;
+import com.github.v0id20.pizzaapp.model.Pizza;
 import com.github.v0id20.pizzaapp.PizzaAppApplication;
 import com.github.v0id20.pizzaapp.R;
 
@@ -62,7 +59,6 @@ public class DishInfoPresenter implements DishInfoPresenterInterface.Presenter {
     public void changeQuantity(boolean add) {
 
         if (add) {
-
             quantityToOrder += 1;
         } else {
             if (quantityToOrder > 1) {
@@ -101,7 +97,6 @@ public class DishInfoPresenter implements DishInfoPresenterInterface.Presenter {
     public void addToOrder() {
         BasketItem basketItem;
         ArrayList<BasketItem> basket = applicationBasket.basketList;
-       // ArrayList<BasketItem> basketWithTotal = (ArrayList<BasketItem>) basket.clone();
         if (basket.size() > 0) {
             for (int i = 0; i < basket.size(); i++) {
                 if (basket.get(i).getName().equals(productName)) {
@@ -109,8 +104,6 @@ public class DishInfoPresenter implements DishInfoPresenterInterface.Presenter {
                         applicationBasket.addExistingBasketItem(i, quantityToOrder);
                         view.close();
                         return;
-                    } else {
-                        continue;
                     }
                 }
             }

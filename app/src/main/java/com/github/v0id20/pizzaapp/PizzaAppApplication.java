@@ -6,8 +6,15 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import com.github.v0id20.pizzaapp.model.Basket;
+import com.github.v0id20.pizzaapp.model.BasketItem;
+import com.github.v0id20.pizzaapp.model.DatabaseHelper;
+import com.github.v0id20.pizzaapp.model.Dish;
+import com.github.v0id20.pizzaapp.model.Pasta;
+import com.github.v0id20.pizzaapp.model.Pizza;
+import com.github.v0id20.pizzaapp.orderhistory.OrderHistoryItem;
+
 import java.util.ArrayList;
-import java.util.HashSet;
 
 public class PizzaAppApplication extends Application {
 
@@ -175,7 +182,7 @@ public class PizzaAppApplication extends Application {
 
                 Log.i("ITS INNER LOOP",
                         "current order id " + orderId + " item and quantity" + name + " " + price);
-                ArrayList<BasketItem> newList = new ArrayList<BasketItem>();
+                ArrayList<BasketItem> newList = new ArrayList<>();
                 newList.add(new BasketItem(name, quantity, price));
                 orderHistory.add(new OrderHistoryItem(orderId, newList, quantity*price));
                 cursor.moveToNext();

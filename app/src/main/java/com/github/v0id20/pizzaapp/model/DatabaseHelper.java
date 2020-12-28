@@ -1,4 +1,4 @@
-package com.github.v0id20.pizzaapp;
+package com.github.v0id20.pizzaapp.model;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -6,6 +6,8 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import androidx.annotation.Nullable;
+
+import com.github.v0id20.pizzaapp.PizzaAppApplication;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String DB_NAME = "Menu";
@@ -121,6 +123,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 db.update(PizzaAppApplication.PIZZA_TABLE, cv,"NAME = ?", new String[] {name});
                 c.moveToNext();
             }
+
+            c.close();
         }
         if (oldVersion<3){
             db.execSQL("CREATE TABLE ORDER_HISTORY (ORDER_ID INTEGER, "
@@ -130,5 +134,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     +"QUANTITY NUMERIC,"
                     +"PRICE NUMERIC);");
         }
+
+
     }
 }

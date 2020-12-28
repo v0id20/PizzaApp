@@ -1,12 +1,12 @@
 package com.github.v0id20.pizzaapp.dishinfo;
 
-import com.github.v0id20.pizzaapp.Dish;
-import com.github.v0id20.pizzaapp.Pasta;
-import com.github.v0id20.pizzaapp.Pizza;
+import com.github.v0id20.pizzaapp.model.Dish;
+import com.github.v0id20.pizzaapp.model.Pasta;
+import com.github.v0id20.pizzaapp.model.Pizza;
 
 public interface DishInfoPresenterInterface {
 
-    public interface View{
+    interface View{
         void showDish(Dish dish);
         void showPizza(Pizza pizza);
         void showPasta(Pasta pasta);

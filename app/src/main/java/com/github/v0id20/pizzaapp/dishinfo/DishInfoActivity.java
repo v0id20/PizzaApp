@@ -2,11 +2,9 @@ package com.github.v0id20.pizzaapp.dishinfo;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -15,15 +13,12 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-import com.github.v0id20.pizzaapp.Basket;
-import com.github.v0id20.pizzaapp.BasketItem;
-import com.github.v0id20.pizzaapp.Dish;
-import com.github.v0id20.pizzaapp.MainActivity;
-import com.github.v0id20.pizzaapp.Pasta;
-import com.github.v0id20.pizzaapp.PastaFragment;
-import com.github.v0id20.pizzaapp.Pizza;
+import com.github.v0id20.pizzaapp.model.Basket;
+import com.github.v0id20.pizzaapp.model.Dish;
+import com.github.v0id20.pizzaapp.main.MainActivity;
+import com.github.v0id20.pizzaapp.model.Pasta;
+import com.github.v0id20.pizzaapp.model.Pizza;
 import com.github.v0id20.pizzaapp.PizzaAppApplication;
-import com.github.v0id20.pizzaapp.PizzaFragment;
 import com.github.v0id20.pizzaapp.R;
 
 

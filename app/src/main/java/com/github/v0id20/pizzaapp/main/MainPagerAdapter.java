@@ -1,6 +1,4 @@
-package com.github.v0id20.pizzaapp;
-
-import android.content.res.Resources;
+package com.github.v0id20.pizzaapp.main;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -8,11 +6,15 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 
-public class FragmentAdapter extends FragmentPagerAdapter {
+import com.github.v0id20.pizzaapp.main.PastaFragment;
+import com.github.v0id20.pizzaapp.main.PizzaFragment;
+import com.github.v0id20.pizzaapp.main.StoreFragment;
+
+public class MainPagerAdapter extends androidx.fragment.app.FragmentPagerAdapter {
 
     String[] tabNames;
 
-    public FragmentAdapter(@NonNull FragmentManager fm, String[] tabNames) {
+    public MainPagerAdapter(@NonNull FragmentManager fm, String[] tabNames) {
         super(fm);
         this.tabNames = tabNames;
     }
@@ -28,15 +30,12 @@ public class FragmentAdapter extends FragmentPagerAdapter {
             case 2:
                 return new StoreFragment();
             default:
-                return null;
-
+                throw new IllegalArgumentException("Wrong position");
         }
-
     }
 
     @Override
     public int getCount() {
-
         return tabNames.length;
     }
 
@@ -44,6 +43,5 @@ public class FragmentAdapter extends FragmentPagerAdapter {
     @Override
     public CharSequence getPageTitle(int position) {
         return tabNames[position];
-
     }
 }

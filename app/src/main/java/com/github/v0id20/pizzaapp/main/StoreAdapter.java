@@ -1,4 +1,4 @@
-package com.github.v0id20.pizzaapp;
+package com.github.v0id20.pizzaapp.main;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,25 +8,25 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.github.v0id20.pizzaapp.R;
+import com.github.v0id20.pizzaapp.model.Store;
+
 import java.util.ArrayList;
 
 public class StoreAdapter extends RecyclerView.Adapter<StoreAdapter.StoreViewHolder> {
-    ArrayList<Store> storeList;
-    OnMapListItemClickListener mapItemClickListener;
+    private ArrayList<Store> storeList;
+    private OnMapListItemClickListener mapItemClickListener;
 
     public StoreAdapter(ArrayList<Store> storeList, OnMapListItemClickListener listener){
         this.storeList = storeList;
         mapItemClickListener = listener;
     }
 
-
     @NonNull
     @Override
     public StoreViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.store_item,parent,false);
-       // View v = parent.findViewById(R.id.store_item_layout);
-        StoreViewHolder viewHolder = new StoreViewHolder(v);
-        return viewHolder;
+        return new StoreViewHolder(v);
     }
 
     @Override
@@ -40,7 +40,6 @@ public class StoreAdapter extends RecyclerView.Adapter<StoreAdapter.StoreViewHol
                 mapItemClickListener.onMapListItemClick(position);
             }
         });
-
     }
 
     @Override

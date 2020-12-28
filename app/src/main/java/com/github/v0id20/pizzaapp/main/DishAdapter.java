@@ -1,4 +1,4 @@
-package com.github.v0id20.pizzaapp;
+package com.github.v0id20.pizzaapp.main;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -10,16 +10,19 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.github.v0id20.pizzaapp.model.Dish;
+import com.github.v0id20.pizzaapp.R;
+
 import java.util.ArrayList;
 
-public class PizzaAdapter extends RecyclerView.Adapter<PizzaAdapter.MyViewHolder> {
+public class DishAdapter extends RecyclerView.Adapter<DishAdapter.MyViewHolder> {
 
     ArrayList<Dish> dishArrayList;
     OnItemClickListener listener;
     Context context;
 
 
-    public PizzaAdapter(ArrayList<Dish> list, OnItemClickListener l, Context context){
+    public DishAdapter(ArrayList<Dish> list, OnItemClickListener l, Context context){
         dishArrayList = list;
         listener = l;
         this.context = context;
@@ -38,7 +41,18 @@ public class PizzaAdapter extends RecyclerView.Adapter<PizzaAdapter.MyViewHolder
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.menu_item,parent, false);
-        return new MyViewHolder(v);
+        final MyViewHolder vh =  new MyViewHolder(v);
+        v.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //такой позишн
+                if (vh.getAdapterPosition()!=-1) {
+                    listener.onItemClick(vh.getAdapterPosition());
+                }
+            }
+        });
+
+        return vh;
     }
 
 
@@ -52,14 +66,6 @@ public class PizzaAdapter extends RecyclerView.Adapter<PizzaAdapter.MyViewHolder
         int imageId = context.getResources().getIdentifier(dishArrayList.get(position).getImageResourceId(), "drawable", context.getPackageName());
         pizzaImageView.setImageResource(imageId);
         pizzaImageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-        v.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                listener.onItemClick(position);
-
-            }
-        });
-
     }
 
     @Override

@@ -1,4 +1,4 @@
-package com.github.v0id20.pizzaapp;
+package com.github.v0id20.pizzaapp.model;
 
 import java.util.ArrayList;
 
@@ -60,7 +60,6 @@ public class Basket {
         totals.setQuantity(totalItemCount);
         totals.setPrice(totalToPay);
 
-
         basketList.remove(item);
         if (basketList.size() == 0) {
             basketWithTotal.clear();
@@ -98,8 +97,6 @@ public class Basket {
         totals.setPrice(totalToPay);
         totals.setQuantity(totalItemCount);
 
-        //poka hz
-        //basketWithTotal.set(basketWithTotal.size()-1,new BasketItem("Total", totalItemCount,totalToPay));
         return totalToPay;
     }
 
@@ -112,21 +109,6 @@ public class Basket {
         basketWithTotal = (ArrayList<BasketItem>) basketList.clone();
         basketWithTotal.add(totals);
 
-//        int ind = 0;
-//        for (BasketItem b :basketWithTotal){
-//            if (b.getName().equals("Total")){
-//
-//                break;
-//            }
-//            ind++;
-//        }
-//
-//        if (ind<basketWithTotal.size()){
-//            basketWithTotal.remove(ind);
-//            basketWithTotal.add(this.totals);
-//        } else {
-//            basketWithTotal.add(this.totals);
-//        }
         return basketWithTotal;
     }
 

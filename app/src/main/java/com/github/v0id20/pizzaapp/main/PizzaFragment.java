@@ -1,6 +1,5 @@
-package com.github.v0id20.pizzaapp;
+package com.github.v0id20.pizzaapp.main;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -13,19 +12,17 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.github.v0id20.pizzaapp.PizzaAppApplication;
+import com.github.v0id20.pizzaapp.R;
 import com.github.v0id20.pizzaapp.dishinfo.DishInfoActivity;
 
 public class PizzaFragment extends Fragment {
 
-    OnItemClickListener listener;
-    PizzaAppApplication application;
-
+    private OnItemClickListener listener;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-
 
         listener = new OnItemClickListener() {
             @Override
@@ -36,19 +33,17 @@ public class PizzaFragment extends Fragment {
                 startActivity(i);
             }
         };
-//
-//
     }
-        @Nullable
+
+    @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         RecyclerView rec = (RecyclerView) inflater.inflate(R.layout.pizza_fragment, container,false);
-        PizzaAdapter pizzaAdapter = new PizzaAdapter(((PizzaAppApplication)getActivity().getApplication()).getPizzaList(), listener, getContext());
+        DishAdapter pizzaAdapter = new DishAdapter(((PizzaAppApplication)getActivity().getApplication()).getPizzaList(), listener, getContext());
         rec.setAdapter(pizzaAdapter);
         GridLayoutManager glm = new GridLayoutManager(getContext(), 2);
         rec.setLayoutManager(glm);
         return rec;
-
     }
 }

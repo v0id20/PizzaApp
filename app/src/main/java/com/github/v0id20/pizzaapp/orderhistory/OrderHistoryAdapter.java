@@ -1,4 +1,4 @@
-package com.github.v0id20.pizzaapp;
+package com.github.v0id20.pizzaapp.orderhistory;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -7,6 +7,8 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.github.v0id20.pizzaapp.R;
 
 import java.util.ArrayList;
 
@@ -32,7 +34,7 @@ public class OrderHistoryAdapter extends RecyclerView.Adapter<OrderHistoryAdapte
 
         final OrderHistoryItem item = orderHistory.get(position);
         TextView orderNumberTv = holder.itemView.findViewById(R.id.order_number);
-        orderNumberTv.setText("Order #"+ Integer.toString(orderHistory.get(position).getOrderId()));
+        orderNumberTv.setText("Order #"+ orderHistory.get(position).getOrderId());
 
 //        TextView orderDateTv = holder.itemView.findViewById(R.id.order_date);
 //        orderNumberTv.setText(Integer.toString(orderHistory.get(position).getOrderId()));

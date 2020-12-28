@@ -9,7 +9,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.github.v0id20.pizzaapp.BasketItem;
+import com.github.v0id20.pizzaapp.model.BasketItem;
 import com.github.v0id20.pizzaapp.R;
 import com.github.v0id20.pizzaapp.dishinfo.DishInfoActivity;
 
@@ -56,7 +56,6 @@ public class OrderAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                     int upToDatePosition = holder.getAdapterPosition();
                     onRemoveOrderItemListener.onRemoveOrderItem(upToDatePosition);
                     notifyDataSetChanged();
-                    //notifyItemRemoved(upToDatePosition);
                 }
             });
         } else {
@@ -77,15 +76,6 @@ public class OrderAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     public int getItemCount() {
         return orders.size();
     }
-
-//    public class OrderViewHolder extends RecyclerView.ViewHolder {
-//        View itemView;
-//
-//        public OrderViewHolder(@NonNull View itemView) {
-//            super(itemView);
-//            this.itemView = itemView;
-//        }
-//    }
 
     public class TotalViewHolder extends RecyclerView.ViewHolder {
         TextView amountToPay;
