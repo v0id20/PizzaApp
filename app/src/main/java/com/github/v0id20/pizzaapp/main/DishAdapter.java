@@ -17,9 +17,9 @@ import java.util.ArrayList;
 
 public class DishAdapter extends RecyclerView.Adapter<DishAdapter.MyViewHolder> {
 
-    ArrayList<Dish> dishArrayList;
-    OnItemClickListener listener;
-    Context context;
+    private ArrayList<Dish> dishArrayList;
+    private OnItemClickListener listener;
+    private Context context;
 
 
     public DishAdapter(ArrayList<Dish> list, OnItemClickListener l, Context context){

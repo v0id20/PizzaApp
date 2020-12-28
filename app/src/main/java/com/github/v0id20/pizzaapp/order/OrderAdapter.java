@@ -16,65 +16,70 @@ import com.github.v0id20.pizzaapp.dishinfo.DishInfoActivity;
 import java.util.ArrayList;
 
 public class OrderAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    final ArrayList<BasketItem> orders;
-    OnRemoveOrderItemListener onRemoveOrderItemListener;
+    private final ArrayList<BasketItem> orders;
+    private double totalPrice;
+    private OnRemoveOrderItemListener onRemoveOrderItemListener;
+    private static int TYPE_ITEM = 0;
+    private static int TYPE_TOTAL = 1;
 
-    public OrderAdapter(ArrayList<BasketItem> orders, OnRemoveOrderItemListener listener){
+    public OrderAdapter(ArrayList<BasketItem> orders, double price,OnRemoveOrderItemListener listener){
         this.orders = orders;
+        totalPrice = price;
         this.onRemoveOrderItemListener = listener;
     }
 
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        if (viewType==BasketItem.TYPE_ITEM){
+        if (viewType==TYPE_ITEM){
             View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.order_item,parent, false);
             return new OrderItemViewHolder(v);
         } else {
             View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.order_total,parent, false);
-
             return new TotalViewHolder(v);
         }
     }
 
+
+
     @Override
     public void onBindViewHolder(@NonNull final RecyclerView.ViewHolder holder, final int position) {
-        if (getItemViewType(position)==BasketItem.TYPE_ITEM){
-            View v = ((OrderItemViewHolder)holder).itemView;
-            TextView productNameTV = v.findViewById(R.id.nameOrderTextView);
-            TextView quantityTV = v.findViewById(R.id.quantityOrderTextView);
-            TextView priceTV = v.findViewById(R.id.priceOrderTextView);
+            if (getItemViewType(position)==TYPE_ITEM){
+                View v = ((OrderItemViewHolder)holder).itemView;
+                TextView productNameTV = v.findViewById(R.id.nameOrderTextView);
+                TextView quantityTV = v.findViewById(R.id.quantityOrderTextView);
+                TextView priceTV = v.findViewById(R.id.priceOrderTextView);
 
-            productNameTV.setText(orders.get(position).getName());
-            quantityTV.setText(Integer.toString(orders.get(position).getQuantity()));
-            priceTV.setText(DishInfoActivity.formatPrice(orders.get(position).getPrice()*orders.get(position).getQuantity()));
+                productNameTV.setText(orders.get(position).getName());
+                quantityTV.setText(Integer.toString(orders.get(position).getQuantity()));
+                priceTV.setText(DishInfoActivity.formatPrice(orders.get(position).getPrice()*orders.get(position).getQuantity()));
 
-            ImageView deleteImageView = v.findViewById(R.id.deleteOrderImageView);
-            deleteImageView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    int upToDatePosition = holder.getAdapterPosition();
-                    onRemoveOrderItemListener.onRemoveOrderItem(upToDatePosition);
-                    notifyDataSetChanged();
-                }
-            });
-        } else {
-            ((TotalViewHolder)holder).amountToPay.setText(DishInfoActivity.formatPrice(orders.get(position).getPrice()));
-        }
+                ImageView deleteImageView = v.findViewById(R.id.deleteOrderImageView);
+                deleteImageView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        int upToDatePosition = holder.getAdapterPosition();
+                        onRemoveOrderItemListener.onRemoveOrderItem(upToDatePosition);
+                    }
+                });
+            } else {
+                ((TotalViewHolder)holder).amountToPay.setText(DishInfoActivity.formatPrice(totalPrice));
+            }
     }
 
     @Override
     public int getItemViewType(int position) {
-        if (orders.get(position).getType()==1){
-            return BasketItem.TYPE_ITEM;
+        if (position<getItemCount()-1){
+            return TYPE_ITEM;
         } else {
-            return  BasketItem.TYPE_TOTAL;
+            return  TYPE_TOTAL;
         }
+
     }
 
     @Override
     public int getItemCount() {
-        return orders.size();
+        return orders.size()+1;
     }
 
     public class TotalViewHolder extends RecyclerView.ViewHolder {
@@ -92,6 +97,10 @@ public class OrderAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             super(itemView);
             this.itemView = itemView;
         }
+    }
+
+    public void setTotalPrice(double totalPrice) {
+        this.totalPrice = totalPrice;
     }
 
 }

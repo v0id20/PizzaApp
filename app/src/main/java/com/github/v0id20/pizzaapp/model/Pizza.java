@@ -2,9 +2,11 @@ package com.github.v0id20.pizzaapp.model;
 
 public class Pizza extends Dish {
 
-    double priceSmall;
-    double priceMedium;
-    double priceLarge;
+    private double priceSmall;
+    private double priceMedium;
+    private double priceLarge;
+
+
 
     public Pizza(String name, String desc, double price,  String resourceId) {
         super(name, desc, price, resourceId);

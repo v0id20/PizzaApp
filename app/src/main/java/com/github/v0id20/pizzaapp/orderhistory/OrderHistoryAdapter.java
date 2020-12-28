@@ -10,10 +10,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.github.v0id20.pizzaapp.R;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class OrderHistoryAdapter extends RecyclerView.Adapter<OrderHistoryAdapter.OrderViewHolder> {
-    ArrayList<OrderHistoryItem> orderHistory;
+    private ArrayList<OrderHistoryItem> orderHistory;
 
     public OrderHistoryAdapter(ArrayList<OrderHistoryItem> orderHistory) {
         this.orderHistory = orderHistory;
@@ -36,8 +38,11 @@ public class OrderHistoryAdapter extends RecyclerView.Adapter<OrderHistoryAdapte
         TextView orderNumberTv = holder.itemView.findViewById(R.id.order_number);
         orderNumberTv.setText("Order #"+ orderHistory.get(position).getOrderId());
 
-//        TextView orderDateTv = holder.itemView.findViewById(R.id.order_date);
-//        orderNumberTv.setText(Integer.toString(orderHistory.get(position).getOrderId()));
+        TextView orderDateTv = holder.itemView.findViewById(R.id.order_date);
+        Date date =  new Date(orderHistory.get(position).getOrderTimeInMillis());
+        SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy HH:mm");
+        String d = sdf.format(date);
+        orderDateTv.setText(d);
 
         TextView orderTotalTv = holder.itemView.findViewById(R.id.order_total);
         orderTotalTv.setText(Double.toString(orderHistory.get(position).getTotalToPay()));

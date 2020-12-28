@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import androidx.annotation.Nullable;
 
+import com.github.v0id20.pizzaapp.DataManager;
 import com.github.v0id20.pizzaapp.PizzaAppApplication;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
@@ -25,7 +26,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public DatabaseHelper(@Nullable Context context) {
         super(context, DB_NAME, null, DB_VERSION);
-        application = (PizzaAppApplication)context.getApplicationContext();
+        //application = (PizzaAppApplication)context.getApplicationContext();
     }
 
     @Override
@@ -82,12 +83,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     +"PRICE NUMERIC,"
                     +"IMAGE_RESOURCE_ID TEXT);");
 
-            db.execSQL("CREATE TABLE BASKET (ORDER_ID INTEGER, "
-                    +"PRODUCT_ID TEXT,"
-                    +"NAME TEXT, "
-                    +"QUANTITY NUMERIC,"
-                    +"PRICE NUMERIC);");
-
             //add new pasta dishes to menu
             insertEntry("Bolognese", "Indulge yourself into exquisite mix of freshly made baba's recipe spaghetti and meaty sauce", 14,  "nerfee_mirandilla_unsplash", db);
             insertEntry("Tagliatelle pollo e funghi", "Tagliatelle pasta with silent chicken & wild born mushrooms\n" +
@@ -110,7 +105,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             db.execSQL("ALTER TABLE PIZZA ADD COLUMN " + COLUMN_PRICE_LARGE + "  NUMERIC");
             db.execSQL("ALTER TABLE PIZZA RENAME COLUMN PRICE TO "+ COLUMN_PRICE_SMALL);
 
-            Cursor c = db.query(PizzaAppApplication.PIZZA_TABLE,new String[] {COLUMN_NAME, COLUMN_PRICE_SMALL},null, null, null, null, null);
+            Cursor c = db.query(
+                    DataManager.PIZZA_TABLE,new String[] {COLUMN_NAME, COLUMN_PRICE_SMALL},null, null, null, null, null);
             c.moveToFirst();
             while (!c.isAfterLast()) {
                 int indexPrice = c.getColumnIndex(COLUMN_PRICE_SMALL);
@@ -120,15 +116,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 ContentValues cv = new ContentValues();
                 cv.put(COLUMN_PRICE_MEDIUM, price*1.2);
                 cv.put(COLUMN_PRICE_LARGE, price*1.4);
-                db.update(PizzaAppApplication.PIZZA_TABLE, cv,"NAME = ?", new String[] {name});
+                db.update(DataManager.PIZZA_TABLE, cv,"NAME = ?", new String[] {name});
                 c.moveToNext();
             }
-
             c.close();
         }
         if (oldVersion<3){
             db.execSQL("CREATE TABLE ORDER_HISTORY (ORDER_ID INTEGER, "
-                    +"DATE NUMERIC,"
+                    +"DATE INTEGER,"
                     +"PRODUCT_ID NUMERIC,"
                     +"NAME TEXT, "
                     +"QUANTITY NUMERIC,"

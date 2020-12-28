@@ -13,6 +13,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import com.github.v0id20.pizzaapp.DataManager;
 import com.github.v0id20.pizzaapp.PizzaAppApplication;
 import com.github.v0id20.pizzaapp.R;
 import com.github.v0id20.pizzaapp.order.OrderActivity;
@@ -22,9 +23,9 @@ public class MainActivity extends AppCompatActivity {
     public static final String EXTRA_POSITION = "position";
     public static final String EXTRA_DISH_TYPE = "dish type";
 
-    String[] tabNames;
-    int basketItemCount;
-    TextView textBasketItemCount;
+    private String[] tabNames;
+    private int basketItemCount;
+    private TextView textBasketItemCount;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,14 +44,16 @@ public class MainActivity extends AppCompatActivity {
         TabLayout tabs = findViewById(R.id.tab_layout);
         tabs.setupWithViewPager(vp);
 
-        basketItemCount = ((PizzaAppApplication)getApplication()).getBasket().totalItemCount;
+        DataManager m = ((PizzaAppApplication)getApplication()).getDataManager();
+        basketItemCount = m.getBasket().getTotalItemCount();
 
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        basketItemCount = ((PizzaAppApplication)getApplication()).getBasket().totalItemCount;
+        DataManager m = ((PizzaAppApplication)getApplication()).getDataManager();
+        basketItemCount = m.getBasket().getTotalItemCount();
         setupBasketBadge(basketItemCount);
     }
 

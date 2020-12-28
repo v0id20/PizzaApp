@@ -4,9 +4,11 @@ import android.os.Bundle;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.github.v0id20.pizzaapp.DataManager;
 import com.github.v0id20.pizzaapp.PizzaAppApplication;
 import com.github.v0id20.pizzaapp.R;
 
@@ -19,10 +21,16 @@ public class OrderHistoryActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order_history);
 
-        RecyclerView orderHistoryRecycler = findViewById(R.id.order_history_recycler);
-        PizzaAppApplication application = (PizzaAppApplication) getApplication();
+        Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle("My Order History");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        ArrayList<OrderHistoryItem> orderHistory = application.getOrderHistory();
+        RecyclerView orderHistoryRecycler = findViewById(R.id.order_history_recycler);
+        DataManager dm = ((PizzaAppApplication) getApplication()).getDataManager();
+
+        ArrayList<OrderHistoryItem> orderHistory = dm.getOrderHistory();
+        orderHistory.get(0).setExpanded(true);
         OrderHistoryAdapter adapter = new OrderHistoryAdapter(orderHistory);
         orderHistoryRecycler.setAdapter(adapter);
         LinearLayoutManager llm = new LinearLayoutManager(this);

@@ -6,10 +6,10 @@ import java.util.ArrayList;
 
 public interface OrderInterface {
     interface View {
-        void showOrder(ArrayList<BasketItem> orderList);
+        void showOrder(ArrayList<BasketItem> orderList, double price);
         void setBasketEmpty();
         void startActivity();
-        void notifyAdapter();
+        void notifyAdapter(double totalPrice);
     }
     interface Presenter{
         void start();

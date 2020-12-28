@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.github.v0id20.pizzaapp.DataManager;
 import com.github.v0id20.pizzaapp.model.Dish;
 import com.github.v0id20.pizzaapp.PizzaAppApplication;
 import com.github.v0id20.pizzaapp.R;
@@ -26,6 +27,7 @@ public class PastaFragment extends Fragment {
     private RecyclerView pastaRecycler;
     private ArrayList<Dish> dishArrayList;
     private OnItemClickListener listener;
+    private DataManager mDataManager;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -44,14 +46,16 @@ public class PastaFragment extends Fragment {
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-       View v = inflater.inflate(R.layout.pasta_fragment, container, false);
-       pastaRecycler = v.findViewById(R.id.pasta_recycler_view);
-       dishArrayList = ((PizzaAppApplication)getActivity().getApplication()).getPastaList();
-       DishAdapter pastaAdapter = new DishAdapter(dishArrayList,listener, getContext());
-       pastaRecycler.setAdapter(pastaAdapter);
-       GridLayoutManager glm = new GridLayoutManager(getContext(), 2);
-       pastaRecycler.setLayoutManager(glm);
-       return v;
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
+            @Nullable Bundle savedInstanceState) {
+        View v = inflater.inflate(R.layout.pasta_fragment, container, false);
+        pastaRecycler = v.findViewById(R.id.pasta_recycler_view);
+        mDataManager = ((PizzaAppApplication) getActivity().getApplication()).getDataManager();
+        dishArrayList = mDataManager.getPastaList();
+        DishAdapter pastaAdapter = new DishAdapter(dishArrayList, listener, getContext());
+        pastaRecycler.setAdapter(pastaAdapter);
+        GridLayoutManager glm = new GridLayoutManager(getContext(), 2);
+        pastaRecycler.setLayoutManager(glm);
+        return v;
     }
 }

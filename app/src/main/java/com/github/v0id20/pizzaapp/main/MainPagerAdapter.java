@@ -12,7 +12,7 @@ import com.github.v0id20.pizzaapp.main.StoreFragment;
 
 public class MainPagerAdapter extends androidx.fragment.app.FragmentPagerAdapter {
 
-    String[] tabNames;
+    private String[] tabNames;
 
     public MainPagerAdapter(@NonNull FragmentManager fm, String[] tabNames) {
         super(fm);

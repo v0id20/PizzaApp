@@ -13,6 +13,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import com.github.v0id20.pizzaapp.DataManager;
 import com.github.v0id20.pizzaapp.model.Basket;
 import com.github.v0id20.pizzaapp.model.Dish;
 import com.github.v0id20.pizzaapp.main.MainActivity;
@@ -36,7 +37,7 @@ public class DishInfoActivity extends AppCompatActivity implements DishInfoPrese
     private Button addToOrder;
     private Basket applicationBasket;
 
-    private PizzaAppApplication application;
+    private DataManager mDataManager;
     private DishInfoPresenter presenter;
 
     @Override
@@ -52,10 +53,10 @@ public class DishInfoActivity extends AppCompatActivity implements DishInfoPrese
         int id = receivedIntent.getIntExtra(MainActivity.EXTRA_POSITION, 0);
         String dish_type = receivedIntent.getStringExtra(MainActivity.EXTRA_DISH_TYPE);
 
-        application = (PizzaAppApplication) getApplication();
-        applicationBasket = application.getBasket();
+        mDataManager = ((PizzaAppApplication) getApplication()).getDataManager();
+        applicationBasket = mDataManager.getBasket();
 
-        presenter = new DishInfoPresenter(this, id, dish_type, applicationBasket, application);
+        presenter = new DishInfoPresenter(this, id, dish_type, applicationBasket, mDataManager);
 
         addToOrder = findViewById(R.id.add_to_order_btn);
         nameTV = findViewById(R.id.name);
@@ -77,7 +78,6 @@ public class DishInfoActivity extends AppCompatActivity implements DishInfoPrese
         removeIV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String text = quantityTV.getText().toString();
                 presenter.changeQuantity(false);
             }
         });
@@ -85,7 +85,6 @@ public class DishInfoActivity extends AppCompatActivity implements DishInfoPrese
         addIV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String text = quantityTV.getText().toString();
                 presenter.changeQuantity(true);
             }
         });

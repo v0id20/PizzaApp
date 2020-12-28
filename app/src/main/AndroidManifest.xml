@@ -23,7 +23,7 @@
         </activity>
         <activity android:name=".dishinfo.DishInfoActivity" android:parentActivityName=".main.MainActivity"></activity>
         <activity android:name=".order.OrderActivity" android:parentActivityName=".main.MainActivity"></activity>
-        <activity android:name=".orderhistory.OrderHistoryActivity"></activity>
+        <activity android:name=".orderhistory.OrderHistoryActivity" android:parentActivityName=".main.MainActivity"></activity>
     </application>
 
 </manifest>

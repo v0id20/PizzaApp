@@ -1,5 +1,6 @@
 package com.github.v0id20.pizzaapp.dishinfo;
 
+import com.github.v0id20.pizzaapp.DataManager;
 import com.github.v0id20.pizzaapp.model.Basket;
 import com.github.v0id20.pizzaapp.model.BasketItem;
 import com.github.v0id20.pizzaapp.model.Dish;
@@ -15,9 +16,9 @@ public class DishInfoPresenter implements DishInfoPresenterInterface.Presenter {
     private final int id;
     private final String dishType;
     private final Basket applicationBasket;
-    private final PizzaAppApplication application;
     private final DishInfoPresenterInterface.View view;
     private final Dish currentDish;
+    private DataManager mDataManager;
 
     private int quantityToOrder = 1;
     private double productPrice;
@@ -26,31 +27,31 @@ public class DishInfoPresenter implements DishInfoPresenterInterface.Presenter {
     public Dish initCurrentDish() {
         Dish d;
         if (dishType.equals(DishInfoActivity.EXTRA_DISH_VALUE_PIZZA)) {
-            d = application.getPizzaList().get(id);
+            d = mDataManager.getPizzaList().get(id);
         } else {
-            d = application.getPastaList().get(id);
+            d = mDataManager.getPastaList().get(id);
         }
         productName = d.getName();
         productPrice = d.getPrice();
         return d;
     }
 
-    public DishInfoPresenter(DishInfoPresenterInterface.View view, int id, String type, Basket basket, PizzaAppApplication application) {
+    public DishInfoPresenter(DishInfoPresenterInterface.View view, int id, String type, Basket basket, DataManager dataManager) {
         this.id = id;
         this.dishType = type;
         applicationBasket = basket;
         this.view = view;
-        this.application = application;
+        mDataManager = dataManager;
         currentDish = initCurrentDish();
     }
 
     @Override
     public void start() {
         if (dishType.equals(DishInfoActivity.EXTRA_DISH_VALUE_PIZZA)) {
-            Pizza pizza = (Pizza) application.getPizzaList().get(id);
+            Pizza pizza = (Pizza) mDataManager.getPizzaList().get(id);
             view.showPizza(pizza);
         } else {
-            Pasta pasta = (Pasta) application.getPastaList().get(id);
+            Pasta pasta = (Pasta) mDataManager.getPastaList().get(id);
             view.showPasta(pasta);
         }
     }
@@ -96,7 +97,7 @@ public class DishInfoPresenter implements DishInfoPresenterInterface.Presenter {
     @Override
     public void addToOrder() {
         BasketItem basketItem;
-        ArrayList<BasketItem> basket = applicationBasket.basketList;
+        ArrayList<BasketItem> basket = applicationBasket.getBasketList();
         if (basket.size() > 0) {
             for (int i = 0; i < basket.size(); i++) {
                 if (basket.get(i).getName().equals(productName)) {

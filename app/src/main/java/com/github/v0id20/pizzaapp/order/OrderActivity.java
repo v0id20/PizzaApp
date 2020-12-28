@@ -12,6 +12,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.github.v0id20.pizzaapp.DataManager;
 import com.github.v0id20.pizzaapp.model.Basket;
 import com.github.v0id20.pizzaapp.model.BasketItem;
 import com.github.v0id20.pizzaapp.model.DatabaseHelper;
@@ -21,20 +22,15 @@ import com.github.v0id20.pizzaapp.R;
 
 import java.util.ArrayList;
 
-public class OrderActivity extends AppCompatActivity implements OrderInterface.View{
-
+public class OrderActivity extends AppCompatActivity implements OrderInterface.View {
 
     private Button placeOrderBtn;
     private TextView emptyTextView;
-    RecyclerView recyclerView;
-    double amountToPay;
-    private Basket currentBasket;
-    Integer currentOrderId = 0;
-    private ArrayList<BasketItem> currentOrderList;
-    OrderAdapter orderAdapter;
-    PizzaAppApplication application;
-OrderPresenter presenter;
-    OnRemoveOrderItemListener onRemoveOrderItemListener;
+    private RecyclerView recyclerView;
+    private OrderAdapter orderAdapter;
+    private DataManager mDataManager;
+    private OrderPresenter presenter;
+    private OnRemoveOrderItemListener onRemoveOrderItemListener;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -46,9 +42,8 @@ OrderPresenter presenter;
         getSupportActionBar().setTitle("My Basket");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        application = (PizzaAppApplication) getApplication();
-        DatabaseHelper helper = new DatabaseHelper(OrderActivity.this);
-        presenter = new OrderPresenter(this, helper, application);
+        mDataManager = ((PizzaAppApplication) getApplication()).getDataManager();
+        presenter = new OrderPresenter(this,this, mDataManager);
 
         emptyTextView = findViewById(R.id.empty);
         placeOrderBtn = findViewById(R.id.place_order);
@@ -77,11 +72,12 @@ OrderPresenter presenter;
     }
 
     @Override
-    public void showOrder(ArrayList<BasketItem> orderList) {
+    public void showOrder(ArrayList<BasketItem> orderList, double price) {
         emptyTextView.setVisibility(View.GONE);
         placeOrderBtn.setEnabled(true);
         recyclerView = findViewById(R.id.order_recycler);
-        orderAdapter = new OrderAdapter(orderList, onRemoveOrderItemListener);
+        recyclerView.setVisibility(View.VISIBLE);
+        orderAdapter = new OrderAdapter(orderList, price, onRemoveOrderItemListener);
         recyclerView.setAdapter(orderAdapter);
         LinearLayoutManager llm = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(llm);
@@ -90,6 +86,7 @@ OrderPresenter presenter;
     @Override
     public void setBasketEmpty() {
         emptyTextView.setVisibility(View.VISIBLE);
+        recyclerView.setVisibility(View.GONE);
         placeOrderBtn.setEnabled(false);
     }
 
@@ -100,8 +97,9 @@ OrderPresenter presenter;
     }
 
     @Override
-    public void notifyAdapter() {
+    public void notifyAdapter(double totalPrice) {
         orderAdapter.notifyDataSetChanged();
+        orderAdapter.setTotalPrice(totalPrice);
     }
 
 

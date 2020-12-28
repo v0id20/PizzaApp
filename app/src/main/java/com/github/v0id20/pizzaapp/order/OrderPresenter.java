@@ -1,58 +1,57 @@
 package com.github.v0id20.pizzaapp.order;
 
-import android.content.ContentValues;
-import android.database.sqlite.SQLiteDatabase;
+import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.widget.Toast;
 
+import com.github.v0id20.pizzaapp.DataManager;
 import com.github.v0id20.pizzaapp.model.Basket;
 import com.github.v0id20.pizzaapp.model.BasketItem;
-import com.github.v0id20.pizzaapp.model.DatabaseHelper;
-import com.github.v0id20.pizzaapp.orderhistory.OrderHistoryItem;
-import com.github.v0id20.pizzaapp.PizzaAppApplication;
+
 
 import java.util.ArrayList;
 
 public class OrderPresenter implements  OrderInterface.Presenter{
 
     private OrderInterface.View view;
-    private PizzaAppApplication application;
     private Basket currentBasket;
-    private int currentOrderId;
+    private double totalToPay;
     private ArrayList<BasketItem> currentOrderList;
     private OrderPresenter.SubmitOrderTask task;
-    private DatabaseHelper helper;
+    private DataManager mDataManager;
+    private Context mContext;
 
-    public OrderPresenter(OrderInterface.View view, DatabaseHelper helper, PizzaAppApplication application){
+    public OrderPresenter(OrderInterface.View view, Context context, DataManager dm){
         this.view = view;
-        this.helper = helper;
-        this.application = application;
+        mContext = context;
+        mDataManager = dm;
     }
 
     @Override
     public void start() {
-
-        currentBasket = application.getBasket();
-        currentOrderList = currentBasket.basketList;
-        currentOrderId = application.currentOrderId;
+        currentBasket = mDataManager.getBasket();
+        currentOrderList = currentBasket.getBasketList();
+        totalToPay = currentBasket.getTotalToPay();
 
         if (currentOrderList.size() == 0) {
             //set empty state if basket is empty
             view.setBasketEmpty();
         } else {
             //set views and add data otherwise
-            ArrayList<BasketItem> currentOrderListWithTotal = currentBasket.createBasketWithTotal();
-            view.showOrder(currentOrderListWithTotal);
+            view.showOrder(currentOrderList, totalToPay);
+            //view.showOrder(currentOrderList);
         }
     }
 
     @Override
     public void removeOrderItem(int position) {
-        BasketItem itemToRemove = currentBasket.basketWithTotal.get(position);
+        BasketItem itemToRemove = currentOrderList.get(position);
         currentBasket.removeBasketItem(itemToRemove);
+        view.notifyAdapter(currentBasket.getTotalToPay());
 
-        Log.i("order", currentBasket.totalToPay+" item quantity :"+currentBasket.totalItemCount);
-        if ( currentBasket.basketWithTotal.size() <1) {
+        Log.i("order", currentBasket.getTotalToPay()+" item quantity :"+currentBasket.getTotalItemCount());
+        if ( currentOrderList.size() <1) {
             view.setBasketEmpty();
         }
     }
@@ -76,7 +75,7 @@ public class OrderPresenter implements  OrderInterface.Presenter{
     }
 
 
-    public class SubmitOrderTask extends AsyncTask<ArrayList<BasketItem>, Void, Void> {
+    public class SubmitOrderTask extends AsyncTask<ArrayList<BasketItem>, Void, Boolean> {
 
         @Override
         protected void onPreExecute() {
@@ -84,40 +83,25 @@ public class OrderPresenter implements  OrderInterface.Presenter{
         }
 
         @Override
-        protected Void doInBackground(ArrayList<BasketItem>... orderLists) {
+        protected Boolean doInBackground(ArrayList<BasketItem>... orderLists) {
 
             ArrayList<BasketItem> orders = orderLists[0];
-            try {
-                SQLiteDatabase db = helper.getReadableDatabase();
-                ArrayList<BasketItem> currentBasketToHistory = new ArrayList<>();
-
-                for (int i = 0; i < orders.size(); i++) {
-
-                    ContentValues orderValues = new ContentValues();
-                    orderValues.put("ORDER_ID", currentOrderId);
-                    orderValues.put("NAME", orders.get(i).getName());
-                    orderValues.put("QUANTITY", orders.get(i).getQuantity());
-                    orderValues.put("PRICE", orders.get(i).getPrice());
-                    db.insert("ORDER_HISTORY", null, orderValues);
-                    currentBasketToHistory.add(new BasketItem(orders.get(i).getName(),orders.get(i).getQuantity(),orders.get(i).getPrice()));
-                }
-                OrderHistoryItem ohi = new OrderHistoryItem(currentOrderId, currentBasketToHistory , 0);
-                ohi.countTotal();
-                application.getOrderHistory().add(0,ohi);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            return null;
+            return mDataManager.submitOrder(orders);
         }
 
         @Override
-        protected void onPostExecute(Void aVoid) {
-            view.setBasketEmpty();
-            currentBasket.clearBasket();
-            Log.i("order list sizec", " "+currentOrderList.size());
-            view.notifyAdapter();
-            application.currentOrderId++;
-            view.startActivity();
+        protected void onPostExecute(Boolean success) {
+            if (success){
+                view.setBasketEmpty();
+                currentBasket.clearBasket();
+                Log.i("order list sizec", " "+currentOrderList.size());
+                view.notifyAdapter(0);
+                mDataManager.incrementCurrentOrderId();
+                view.startActivity();
+            } else {
+                Toast.makeText(mContext, "Database unavailable. Please try again later.", Toast.LENGTH_SHORT).show();
+            }
+
         }
     }
 
