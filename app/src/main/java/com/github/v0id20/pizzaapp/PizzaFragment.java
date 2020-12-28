@@ -1,5 +1,6 @@
 package com.github.v0id20.pizzaapp;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -18,6 +19,7 @@ public class PizzaFragment extends Fragment {
 
     OnItemClickListener listener;
     PizzaAppApplication application;
+
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -42,7 +44,7 @@ public class PizzaFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         RecyclerView rec = (RecyclerView) inflater.inflate(R.layout.pizza_fragment, container,false);
-        PizzaAdapter pizzaAdapter = new PizzaAdapter(((PizzaAppApplication)getActivity().getApplication()).getPizzaList(), listener);
+        PizzaAdapter pizzaAdapter = new PizzaAdapter(((PizzaAppApplication)getActivity().getApplication()).getPizzaList(), listener, getContext());
         rec.setAdapter(pizzaAdapter);
         GridLayoutManager glm = new GridLayoutManager(getContext(), 2);
         rec.setLayoutManager(glm);

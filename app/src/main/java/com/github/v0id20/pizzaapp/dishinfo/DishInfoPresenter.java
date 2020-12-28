@@ -15,12 +15,12 @@ import java.util.ArrayList;
 import java.util.Locale;
 
 public class DishInfoPresenter implements DishInfoPresenterInterface.Presenter {
-    private int id;
-    private String dishType;
-    private Basket applicationBasket;
-    private PizzaAppApplication application;
-    private DishInfoPresenterInterface.View view;
-    private Dish currentDish;
+    private final int id;
+    private final String dishType;
+    private final Basket applicationBasket;
+    private final PizzaAppApplication application;
+    private final DishInfoPresenterInterface.View view;
+    private final Dish currentDish;
 
     private int quantityToOrder = 1;
     private double productPrice;
@@ -59,18 +59,17 @@ public class DishInfoPresenter implements DishInfoPresenterInterface.Presenter {
     }
 
     @Override
-    public void changeQuantity(boolean add, String quantityText) {
-        int quantity = Integer.valueOf(quantityText);
+    public void changeQuantity(boolean add) {
+
         if (add) {
-            quantity += 1;
+
             quantityToOrder += 1;
         } else {
             if (quantityToOrder > 1) {
-                quantity -= 1;
                 quantityToOrder -= 1;
             }
         }
-        view.setQuantity(quantity);
+        view.setQuantity(quantityToOrder);
         String text = String.format(Locale.getDefault(), "Add %d to order - $%.2f", quantityToOrder, productPrice * quantityToOrder);
         view.setButtonText(text);
     }

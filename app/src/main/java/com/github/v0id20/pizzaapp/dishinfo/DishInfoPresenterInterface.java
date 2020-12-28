@@ -18,7 +18,7 @@ public interface DishInfoPresenterInterface {
 
     interface Presenter{
         void start();
-        void changeQuantity(boolean add, String quantity);
+        void changeQuantity(boolean add);
         void onSizeSelected(int checkedId);
         void addToOrder();
 

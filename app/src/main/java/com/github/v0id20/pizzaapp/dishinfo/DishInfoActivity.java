@@ -41,8 +41,8 @@ public class DishInfoActivity extends AppCompatActivity implements DishInfoPrese
     private Button addToOrder;
     private Basket applicationBasket;
 
-    PizzaAppApplication application;
-    DishInfoPresenter presenter;
+    private PizzaAppApplication application;
+    private DishInfoPresenter presenter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -83,7 +83,7 @@ public class DishInfoActivity extends AppCompatActivity implements DishInfoPrese
             @Override
             public void onClick(View v) {
                 String text = quantityTV.getText().toString();
-                presenter.changeQuantity(false, text);
+                presenter.changeQuantity(false);
             }
         });
         ImageView addIV = findViewById(R.id.add);
@@ -91,7 +91,7 @@ public class DishInfoActivity extends AppCompatActivity implements DishInfoPrese
             @Override
             public void onClick(View v) {
                 String text = quantityTV.getText().toString();
-                presenter.changeQuantity(true, text);
+                presenter.changeQuantity(true);
             }
         });
 
@@ -109,7 +109,8 @@ public class DishInfoActivity extends AppCompatActivity implements DishInfoPrese
 
     @Override
     public void showDish(Dish dish) {
-        dishIV.setImageResource(dish.getImageResourceId());
+        int imageId = getResources().getIdentifier(dish.getImageResourceId(), "drawable", this.getPackageName());
+        dishIV.setImageResource(imageId);
         nameTV.setText(dish.getName());
         descriptionTV.setText(dish.getDescription());
         priceTV.setText(formatPrice(dish.getPrice()));
@@ -127,7 +128,7 @@ public class DishInfoActivity extends AppCompatActivity implements DishInfoPrese
     @Override
     public void showPasta(Pasta pasta) {
         showDish(pasta);
-        // radioGroup.setVisibility(View.GONE);
+        radioGroup.setVisibility(View.GONE);
     }
 
     @Override

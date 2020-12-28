@@ -1,5 +1,6 @@
 package com.github.v0id20.pizzaapp;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,12 +16,13 @@ public class PizzaAdapter extends RecyclerView.Adapter<PizzaAdapter.MyViewHolder
 
     ArrayList<Dish> dishArrayList;
     OnItemClickListener listener;
+    Context context;
 
 
-    public PizzaAdapter(ArrayList<Dish> list, OnItemClickListener l){
+    public PizzaAdapter(ArrayList<Dish> list, OnItemClickListener l, Context context){
         dishArrayList = list;
         listener = l;
-
+        this.context = context;
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
@@ -47,7 +49,8 @@ public class PizzaAdapter extends RecyclerView.Adapter<PizzaAdapter.MyViewHolder
         nameTextView.setText(dishArrayList.get(position).getName());
 
         ImageView pizzaImageView = v.findViewById(R.id.pizzaImageView);
-        pizzaImageView.setImageResource(dishArrayList.get(position).getImageResourceId());
+        int imageId = context.getResources().getIdentifier(dishArrayList.get(position).getImageResourceId(), "drawable", context.getPackageName());
+        pizzaImageView.setImageResource(imageId);
         pizzaImageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
         v.setOnClickListener(new View.OnClickListener() {
             @Override

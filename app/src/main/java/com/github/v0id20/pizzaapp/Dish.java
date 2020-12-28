@@ -4,13 +4,13 @@ public class Dish {
     private String name;
     private String description;
     private double price;
-    private int imageResourceId;
+    private String imageResourceId;
 
     public Dish(){
         super();
     }
 
-    public Dish(String name, String desc, double price, int resourceId) {
+    public Dish(String name, String desc, double price, String resourceId) {
         this.name = name;
         description = desc;
         this.price = price;
@@ -29,7 +29,7 @@ public class Dish {
         return price;
     }
 
-    public int getImageResourceId() {
+    public String getImageResourceId() {
         return imageResourceId;
     }
 }

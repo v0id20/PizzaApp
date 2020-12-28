@@ -1,4 +1,4 @@
-package com.github.v0id20.pizzaapp;
+package com.github.v0id20.pizzaapp.order;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +9,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.github.v0id20.pizzaapp.BasketItem;
+import com.github.v0id20.pizzaapp.R;
 import com.github.v0id20.pizzaapp.dishinfo.DishInfoActivity;
 
 import java.util.ArrayList;
@@ -33,7 +35,6 @@ public class OrderAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
             return new TotalViewHolder(v);
         }
-
     }
 
     @Override
@@ -59,11 +60,8 @@ public class OrderAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 }
             });
         } else {
-
             ((TotalViewHolder)holder).amountToPay.setText(DishInfoActivity.formatPrice(orders.get(position).getPrice()));
         }
-
-
     }
 
     @Override
@@ -80,14 +78,14 @@ public class OrderAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         return orders.size();
     }
 
-    public class OrderViewHolder extends RecyclerView.ViewHolder {
-        View itemView;
-
-        public OrderViewHolder(@NonNull View itemView) {
-            super(itemView);
-            this.itemView = itemView;
-        }
-    }
+//    public class OrderViewHolder extends RecyclerView.ViewHolder {
+//        View itemView;
+//
+//        public OrderViewHolder(@NonNull View itemView) {
+//            super(itemView);
+//            this.itemView = itemView;
+//        }
+//    }
 
     public class TotalViewHolder extends RecyclerView.ViewHolder {
         TextView amountToPay;

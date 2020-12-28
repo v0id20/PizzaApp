@@ -22,7 +22,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".dishinfo.DishInfoActivity" android:parentActivityName=".MainActivity"></activity>
-        <activity android:name=".OrderActivity" android:parentActivityName=".MainActivity"></activity>
+        <activity android:name=".order.OrderActivity" android:parentActivityName=".MainActivity"></activity>
         <activity android:name=".OrderHistoryActivity"></activity>
     </application>
 

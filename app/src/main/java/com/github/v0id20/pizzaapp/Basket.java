@@ -1,17 +1,19 @@
 package com.github.v0id20.pizzaapp;
 
-import android.widget.Toast;
-
 import java.util.ArrayList;
 
 public class Basket {
 
     public ArrayList<BasketItem> basketList;
-    ArrayList<BasketItem> basketWithTotal;
-    BasketItem totals;
-    int totalItemCount;
-    double totalToPay;
-    int orderId;
+    public ArrayList<BasketItem> basketWithTotal;
+    public BasketItem totals;
+    public int totalItemCount;
+    public double totalToPay;
+    public int orderId;
+
+//    public Basket(int orderId){
+//        this.orderId = orderId;
+//    }
 
 
     public ArrayList<BasketItem> getBasketList() {
@@ -34,13 +36,13 @@ public class Basket {
         return totalToPay;
     }
 
-    public ArrayList<BasketItem> clearBasket(){
-        basketList =new ArrayList<>();
-        basketWithTotal = new ArrayList<>();
+    public void clearBasket(){
+        basketList.clear();
+        basketWithTotal.clear();
         totalToPay = 0;
         totalItemCount = 0;
         totals = new BasketItem("Total", 0 , 0, BasketItem.TYPE_TOTAL);
-        return basketList;
+        //?basketWithTotal.add(totals);
     }
 
     public int countItemQuantity() {

@@ -6,7 +6,7 @@ public class Pizza extends Dish {
     double priceMedium;
     double priceLarge;
 
-    public Pizza(String name, String desc, double price,  int resourceId) {
+    public Pizza(String name, String desc, double price,  String resourceId) {
         super(name, desc, price, resourceId);
     }
 
@@ -14,7 +14,7 @@ public class Pizza extends Dish {
 
     }
 
-    public Pizza(String name, String desc, double priceSmall, double priceMedium, double priceLarge,  int resourceId) {
+    public Pizza(String name, String desc, double priceSmall, double priceMedium, double priceLarge,  String resourceId) {
         super(name, desc, priceSmall, resourceId);
         this.priceSmall = priceSmall;
         this.priceMedium = priceMedium;

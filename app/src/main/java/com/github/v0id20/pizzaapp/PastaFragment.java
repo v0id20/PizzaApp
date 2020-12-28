@@ -45,7 +45,7 @@ public class PastaFragment extends Fragment {
        View v = inflater.inflate(R.layout.pasta_fragment, container, false);
        pastaRecycler = v.findViewById(R.id.pasta_recycler_view);
        dishArrayList = ((PizzaAppApplication)getActivity().getApplication()).getPastaList();
-       PizzaAdapter pastaAdapter = new PizzaAdapter(dishArrayList,listener);
+       PizzaAdapter pastaAdapter = new PizzaAdapter(dishArrayList,listener, getContext());
        pastaRecycler.setAdapter(pastaAdapter);
        GridLayoutManager glm = new GridLayoutManager(getContext(), 2);
        pastaRecycler.setLayoutManager(glm);
